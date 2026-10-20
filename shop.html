@@ -1,58 +1,767 @@
-
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Antur Online Shop Bd</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f5f7fb;
-      color: #222;
-    }
-    header {
-      background: #ea580c;
-      color: white;
-      padding: 22px 15px;
-      text-align: center;
-    }
-    .container {
-      padding: 20px;
-      text-align: center;
-    }
-    .products {
-      background: white;
-      border-radius: 12px;
-      padding: 25px 15px;
-      margin-top: 20px;
-    }
-    .admin {
-      display: inline-block;
-      background: #ea580c;
-      color: white;
-      text-decoration: none;
-      padding: 12px 20px;
-      border-radius: 8px;
-      margin-top: 15px;
-    }
-  </style>
-</head>
-<body>
-  <header>
-    <h1>Antur Online Shop Bd</h1>
-    <p>আপনার পছন্দের পণ্য কিনুন সহজেই</p>
-  </header>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#e8590c">
+<title>Antur Online Shop BD</title>
 
-  <main class="container">
-    <h2>আমাদের পণ্যসমূহ</h2>
-    <div class="products">
-      <p>পণ্য শিগগিরই এখানে দেখানো হবে।</p>
-      <p>পণ্য দেখতে ও অর্ডার করতে পরবর্তী ধাপ অনুসরণ করুন।</p>
+<style>
+:root {
+  --primary: #e8590c;
+  --dark: #242424;
+  --bg: #f5f7fb;
+  --white: #fff;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: var(--bg);
+  color: var(--dark);
+}
+header {
+  background: var(--primary);
+  color: white;
+  padding: 18px 14px;
+  text-align: center;
+}
+header h1 { margin: 0 0 7px; font-size: 25px; }
+header p { margin: 0; font-size: 14px; }
+nav {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 12px;
+  background: white;
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  box-shadow: 0 2px 8px #0001;
+}
+button, .navbtn {
+  border: 0;
+  border-radius: 8px;
+  padding: 11px 14px;
+  cursor: pointer;
+  font-size: 14px;
+}
+.navbtn, .primary {
+  background: var(--primary);
+  color: white;
+}
+.secondary { background: #eee; color: #222; }
+.danger { background: #c62828; color: white; }
+.container {
+  width: min(1100px, 100%);
+  padding: 15px;
+  margin: auto;
+}
+.search {
+  width: 100%;
+  padding: 13px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  margin-bottom: 12px;
+  font-size: 16px;
+}
+.categories {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+.categories button { background: white; border: 1px solid #ddd; }
+.categories button.active {
+  background: var(--primary);
+  color: white;
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+.card {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 9px #0000000c;
+}
+.product-img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  background: #eee;
+}
+.card-body { padding: 11px; }
+.card h3 { margin: 0 0 8px; font-size: 16px; }
+.price {
+  color: var(--primary);
+  font-weight: bold;
+  margin: 8px 0;
+}
+.stock { font-size: 12px; color: #237a36; }
+.stock.out { color: #c62828; }
+.card button { width: 100%; margin-top: 8px; }
+.panel {
+  background: white;
+  padding: 16px;
+  margin: 15px 0;
+  border-radius: 12px;
+}
+.panel h2 { margin-top: 0; font-size: 20px; }
+.field {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  margin: 8px 0 12px;
+  font: inherit;
+}
+textarea.field { min-height: 80px; resize: vertical; }
+.row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.row > * { flex: 1; min-width: 0; }
+.cart-item, .order-item {
+  padding: 12px 0;
+  border-bottom: 1px solid #eee;
+}
+.small { font-size: 13px; color: #666; }
+.hidden { display: none !important; }
+.notice {
+  background: #fff3e9;
+  color: #803300;
+  border-radius: 8px;
+  padding: 12px;
+  margin: 10px 0;
+  overflow-wrap: anywhere;
+}
+footer {
+  text-align: center;
+  padding: 25px 12px;
+  background: #242424;
+  color: white;
+  margin-top: 30px;
+}
+footer a { color: white; }
+#message { white-space: pre-wrap; overflow-wrap: anywhere; }
+@media (min-width: 650px) {
+  .grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .container { padding: 22px; }
+}
+</style>
+</head>
+
+<body>
+<header>
+  <h1>🛍️ Antur Online Shop BD</h1>
+  <p>আপনার পছন্দের জামা-কাপড় ও জুতার বিশ্বস্ত অনলাইন শপ</p>
+</header>
+
+<nav>
+  <button class="navbtn" onclick="showSection('shop')">🏠 হোম</button>
+  <button class="navbtn" onclick="showSection('cart')">🛒 কার্ট (<span id="cartCount">0</span>)</button>
+  <button class="navbtn" onclick="showSection('admin')">🔐 অ্যাডমিন</button>
+</nav>
+
+<main class="container">
+  <div id="message" class="notice hidden" role="status"></div>
+
+  <section id="shopSection">
+    <input id="search" class="search"
+      placeholder="পণ্যের নাম দিয়ে খুঁজুন..."
+      oninput="renderProducts()">
+
+    <div class="categories">
+      <button class="active" data-cat="সব" onclick="setCategory('সব',this)">সব পণ্য</button>
+      <button data-cat="জামা-কাপড়" onclick="setCategory('জামা-কাপড়',this)">👕 জামা-কাপড়</button>
+      <button data-cat="জুতা" onclick="setCategory('জুতা',this)">👟 জুতা</button>
     </div>
 
-    <a class="admin" href="./admin.html">Admin Panel</a>
-  </main>
+    <h2>আমাদের পণ্য</h2>
+    <p class="small" id="shopStatus">পণ্য লোড হচ্ছে...</p>
+    <div id="products" class="grid"></div>
+  </section>
+
+  <section id="cartSection" class="hidden">
+    <div class="panel">
+      <h2>🛒 তোমার কার্ট</h2>
+      <div id="cartItems"></div>
+      <h3>মোট: ৳<span id="cartTotal">0</span></h3>
+      <p class="small">ডেলিভারি চার্জ প্রয়োজনে দোকান থেকে নিশ্চিত করা হবে।</p>
+    </div>
+
+    <div class="panel">
+      <h2>📦 অর্ডার করতে তথ্য দাও</h2>
+      <form id="orderForm">
+        <label>তোমার নাম</label>
+        <input class="field" id="customerName" maxlength="80" required>
+
+        <label>মোবাইল নম্বর</label>
+        <input class="field" id="customerPhone" type="tel"
+          maxlength="20" required>
+
+        <label>সম্পূর্ণ ঠিকানা</label>
+        <textarea class="field" id="customerAddress"
+          maxlength="500" required></textarea>
+
+        <label>অতিরিক্ত তথ্য (ঐচ্ছিক)</label>
+        <textarea class="field" id="customerNote" maxlength="300"></textarea>
+
+        <button class="primary" type="submit" id="orderBtn">
+          অর্ডার নিশ্চিত করুন
+        </button>
+      </form>
+    </div>
+  </section>
+
+  <section id="adminSection" class="hidden">
+    <div class="panel">
+      <h2>🔐 অ্যাডমিন লগইন</h2>
+      <p class="small">
+        Firebase Console-এ আগে তৈরি করা অনুমোদিত অ্যাডমিন অ্যাকাউন্ট ব্যবহার করো।
+      </p>
+      <form id="loginForm">
+        <label>অ্যাডমিন ইমেইল</label>
+        <input class="field" type="email" id="adminEmail" required>
+        <label>পাসওয়ার্ড</label>
+        <input class="field" type="password" id="adminPassword"
+          autocomplete="current-password" required>
+        <button class="primary" type="submit">লগইন</button>
+      </form>
+      <button class="secondary hidden" id="logoutBtn" onclick="logoutAdmin()">
+        লগআউট
+      </button>
+      <p id="adminStatus" class="small">অ্যাডমিন লগইন করা নেই।</p>
+    </div>
+
+    <div id="adminPanel" class="hidden">
+      <div class="panel">
+        <h2>➕ নতুন পণ্য যোগ / সম্পাদনা</h2>
+        <form id="productForm">
+          <input type="hidden" id="editProductId">
+
+          <label>পণ্যের নাম</label>
+          <input class="field" id="productName" maxlength="100" required>
+
+          <label>ক্যাটাগরি</label>
+          <select class="field" id="productCategory">
+            <option value="জামা-কাপড়">জামা-কাপড়</option>
+            <option value="জুতা">জুতা</option>
+          </select>
+
+          <div class="row">
+            <div>
+              <label>দাম (টাকা)</label>
+              <input class="field" id="productPrice"
+                type="number" min="0" max="10000000" step="1" required>
+            </div>
+            <div>
+              <label>স্টক (সংখ্যা)</label>
+              <input class="field" id="productStock"
+                type="number" min="0" max="1000000" step="1" required>
+            </div>
+          </div>
+
+          <label>ছবির HTTPS URL</label>
+          <input class="field" id="productImage" type="url"
+            placeholder="https://example.com/image.jpg">
+
+          <label>বিবরণ</label>
+          <textarea class="field" id="productDescription" maxlength="500"></textarea>
+
+          <button class="primary" type="submit">পণ্য সংরক্ষণ</button>
+          <button class="secondary" type="button" onclick="resetProductForm()">
+            ফর্ম পরিষ্কার
+          </button>
+        </form>
+      </div>
+
+      <div class="panel">
+        <h2>📋 পণ্য পরিচালনা</h2>
+        <div id="adminProducts"></div>
+      </div>
+
+      <div class="panel">
+        <h2>📦 গ্রাহকের অর্ডার</h2>
+        <button class="secondary" onclick="loadOrders()">অর্ডার রিফ্রেশ</button>
+        <div id="adminOrders"></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <p>© <span id="year"></span> Antur Online Shop BD</p>
+  <p>অনলাইন শপিং, সহজ ও সুবিধাজনক</p>
+</footer>
+
+<script type="module">
+import { initializeApp }
+  from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  signOut,
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  getDocs,
+  doc,
+  setDoc,
+  updateDoc,
+  deleteDoc,
+  query,
+  orderBy,
+  serverTimestamp
+} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+// তোমার দেওয়া Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyBdsjaLpXfy8_Ej1u-0lddD9-AvTXT1LHo",
+  authDomain: "antur-online-shop-bd.firebaseapp.com",
+  projectId: "antur-online-shop-bd",
+  storageBucket: "antur-online-shop-bd.firebasestorage.app",
+  messagingSenderId: "403646357086",
+  appId: "1:403646357086:web:dee655461589476f115ecf"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+let products = [];
+let cart = {};
+let category = "সব";
+let adminUser = null;
+let busy = false;
+
+const $ = id => document.getElementById(id);
+
+function message(text, error = false) {
+  $("message").textContent = text;
+  $("message").classList.remove("hidden");
+  $("message").style.background = error ? "#ffebee" : "#fff3e9";
+  $("message").style.color = error ? "#b71c1c" : "#803300";
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+function clearMessage() {
+  $("message").classList.add("hidden");
+}
+function safeText(value) {
+  return String(value ?? "").replace(/[&<>"']/g, char => ({
+    "&": "&amp;", "<": "&lt;", ">": "&gt;",
+    '"': "&quot;", "'": "&#39;"
+  })[char]);
+}
+function money(value) {
+  return Number(value || 0).toLocaleString("en-BD");
+}
+function validImage(url) {
+  try {
+    const parsed = new URL(url);
+    return parsed.protocol === "https:" ? parsed.href : "";
+  } catch {
+    return "";
+  }
+}
+
+window.showSection = function(section) {
+  clearMessage();
+  ["shop", "cart", "admin"].forEach(name => {
+    $(name + "Section").classList.toggle("hidden", name !== section);
+  });
+  if (section === "cart") renderCart();
+  if (section === "admin" && adminUser) {
+    renderAdminProducts();
+    loadOrders();
+  }
+};
+
+window.setCategory = function(value, button) {
+  category = value;
+  document.querySelectorAll(".categories button")
+    .forEach(el => el.classList.remove("active"));
+  button.classList.add("active");
+  renderProducts();
+};
+
+async function loadProducts() {
+  $("shopStatus").textContent = "পণ্য লোড হচ্ছে...";
+  try {
+    const snapshot = await getDocs(collection(db, "products"));
+    products = snapshot.docs.map(item => ({
+      id: item.id, ...item.data()
+    }));
+    renderProducts();
+    if (adminUser) renderAdminProducts();
+    $("shopStatus").textContent =
+      products.length ? `${products.length}টি পণ্য পাওয়া গেছে` :
+      "এখনও পণ্য যোগ করা হয়নি।";
+  } catch (error) {
+    console.error(error);
+    $("shopStatus").textContent = "পণ্য লোড করা যায়নি। Firebase Rules পরীক্ষা করো।";
+  }
+}
+
+function renderProducts() {
+  const term = $("search").value.trim().toLowerCase();
+  const filtered = products.filter(p =>
+    (category === "সব" || p.category === category) &&
+    String(p.name || "").toLowerCase().includes(term)
+  );
+
+  $("products").innerHTML = filtered.map(p => {
+    const img = validImage(p.image || "");
+    const stock = Math.max(0, Number(p.stock) || 0);
+    return `
+      <article class="card">
+        ${img
+          ? `<img class="product-img" src="${safeText(img)}"
+               alt="${safeText(p.name)}" loading="lazy">`
+          : `<div class="product-img"></div>`}
+        <div class="card-body">
+          <h3>${safeText(p.name)}</h3>
+          <div class="small">${safeText(p.category || "")}</div>
+          <p class="price">৳${money(p.price)}</p>
+          <p class="small">${safeText(p.description || "")}</p>
+          <div class="stock ${stock ? "" : "out"}">
+            ${stock ? "স্টকে আছে: " + stock : "স্টক শেষ"}
+          </div>
+          <button class="primary" data-add="${safeText(p.id)}"
+            ${stock < 1 ? "disabled" : ""}>কার্টে যোগ করো</button>
+        </div>
+      </article>`;
+  }).join("") || "<p>কোনো পণ্য পাওয়া যায়নি।</p>";
+
+  $("products").querySelectorAll("[data-add]").forEach(button => {
+    button.addEventListener("click", () => addToCart(button.dataset.add));
+  });
+}
+
+function addToCart(id) {
+  const p = products.find(item => item.id === id);
+  if (!p || Number(p.stock) < 1) return message("পণ্যটি স্টকে নেই।", true);
+  const current = cart[id]?.qty || 0;
+  if (current >= Number(p.stock)) return message("স্টকের চেয়ে বেশি নেওয়া যাবে না।", true);
+  cart[id] = { qty: current + 1 };
+  updateCartCount();
+  message("পণ্যটি কার্টে যোগ হয়েছে।");
+}
+
+function updateCartCount() {
+  $("cartCount").textContent =
+    Object.values(cart).reduce((sum, item) => sum + item.qty, 0);
+}
+
+function renderCart() {
+  let total = 0;
+  const entries = Object.entries(cart).filter(([id, item]) =>
+    products.some(p => p.id === id && item.qty > 0)
+  );
+
+  $("cartItems").innerHTML = entries.map(([id, item]) => {
+    const p = products.find(x => x.id === id);
+    total += Number(p.price) * item.qty;
+    return `
+      <div class="cart-item">
+        <strong>${safeText(p.name)}</strong>
+        <p>৳${money(p.price)} × ${item.qty}</p>
+        <div class="row">
+          <button class="secondary" data-minus="${safeText(id)}">−</button>
+          <button class="secondary" data-plus="${safeText(id)}">+</button>
+          <button class="danger" data-remove="${safeText(id)}">বাদ দাও</button>
+        </div>
+      </div>`;
+  }).join("") || "<p>তোমার কার্ট খালি।</p>";
+
+  $("cartTotal").textContent = money(total);
+  updateCartCount();
+
+  $("cartItems").querySelectorAll("[data-minus]").forEach(b =>
+    b.onclick = () => changeQty(b.dataset.minus, -1));
+  $("cartItems").querySelectorAll("[data-plus]").forEach(b =>
+    b.onclick = () => changeQty(b.dataset.plus, 1));
+  $("cartItems").querySelectorAll("[data-remove]").forEach(b =>
+    b.onclick = () => {
+      delete cart[b.dataset.remove];
+      renderCart();
+    });
+}
+
+function changeQty(id, amount) {
+  const p = products.find(x => x.id === id);
+  if (!p || !cart[id]) return;
+  const next = cart[id].qty + amount;
+  if (next <= 0) delete cart[id];
+  else if (next <= Number(p.stock)) cart[id].qty = next;
+  else message("স্টকের চেয়ে বেশি পণ্য নেওয়া যাবে না।", true);
+  renderCart();
+}
+
+$("orderForm").addEventListener("submit", async event => {
+  event.preventDefault();
+  if (busy) return;
+
+  const entries = Object.entries(cart);
+  if (!entries.length) return message("প্রথমে কার্টে পণ্য যোগ করো।", true);
+
+  const name = $("customerName").value.trim();
+  const phone = $("customerPhone").value.trim();
+  const address = $("customerAddress").value.trim();
+  const note = $("customerNote").value.trim();
+
+  if (!name || !phone || !address)
+    return message("নাম, ফোন ও ঠিকানা পূরণ করো।", true);
+
+  // ক্লায়েন্টের দাম বিশ্বাস না করে বর্তমান পণ্যের ডেটা থেকে হিসাব।
+  const lines = [];
+  for (const [id, item] of entries) {
+    const p = products.find(x => x.id === id);
+    if (!p || !Number.isSafeInteger(item.qty) ||
+        item.qty < 1 || item.qty > Number(p.stock)) {
+      return message("একটি পণ্যের স্টক বদলেছে। কার্ট আপডেট করে আবার চেষ্টা করো।", true);
+    }
+    const price = Number(p.price);
+    if (!Number.isFinite(price) || price < 0)
+      return message("পণ্যের দাম সঠিক নয়।", true);
+    lines.push({
+      productId: id,
+      name: String(p.name).slice(0, 100),
+      price,
+      quantity: item.qty
+    });
+  }
+
+  const total = lines.reduce((sum, item) =>
+    sum + item.price * item.quantity, 0);
+
+  busy = true;
+  $("orderBtn").disabled = true;
+  try {
+    await addDoc(collection(db, "orders"), {
+      customerName: name.slice(0, 80),
+      phone: phone.slice(0, 20),
+      address: address.slice(0, 500),
+      note: note.slice(0, 300),
+      items: lines,
+      total,
+      status: "নতুন",
+      createdAt: serverTimestamp()
+    });
+    cart = {};
+    updateCartCount();
+    $("orderForm").reset();
+    renderCart();
+    message("অর্ডার জমা হয়েছে! অর্ডারের বিস্তারিত ফোনে নিশ্চিত করা হবে।");
+  } catch (error) {
+    console.error(error);
+    message("অর্ডার জমা হয়নি। Firebase Firestore Rules ও সংযোগ পরীক্ষা করো।", true);
+  } finally {
+    busy = false;
+    $("orderBtn").disabled = false;
+  }
+});
+
+$("loginForm").addEventListener("submit", async event => {
+  event.preventDefault();
+  try {
+    await signInWithEmailAndPassword(
+      auth,
+      $("adminEmail").value.trim(),
+      $("adminPassword").value
+    );
+    $("adminPassword").value = "";
+  } catch (error) {
+    console.error(error);
+    message("লগইন হয়নি। ইমেইল, পাসওয়ার্ড এবং Authentication সেটিং পরীক্ষা করো।", true);
+  }
+});
+
+onAuthStateChanged(auth, user => {
+  adminUser = user;
+  $("loginForm").classList.toggle("hidden", !!user);
+  $("logoutBtn").classList.toggle("hidden", !user);
+  $("adminPanel").classList.toggle("hidden", !user);
+  $("adminStatus").textContent = user
+    ? "লগইন করা অ্যাকাউন্ট: " + user.email
+    : "অ্যাডমিন লগইন করা নেই।";
+
+  if (user) {
+    loadProducts();
+    loadOrders();
+  }
+});
+
+window.logoutAdmin = async function() {
+  try {
+    await signOut(auth);
+    message("লগআউট হয়েছে।");
+  } catch (error) {
+    message("লগআউট করা যায়নি।", true);
+  }
+};
+
+$("productForm").addEventListener("submit", async event => {
+  event.preventDefault();
+  if (!adminUser) return message("আগে অ্যাডমিন লগইন করো।", true);
+
+  const name = $("productName").value.trim();
+  const price = Number($("productPrice").value);
+  const stock = Number($("productStock").value);
+  const image = $("productImage").value.trim();
+  const description = $("productDescription").value.trim();
+
+  if (!name || !Number.isSafeInteger(price) || price < 0 ||
+      !Number.isSafeInteger(stock) || stock < 0)
+    return message("পণ্যের নাম, দাম ও স্টক সঠিকভাবে দাও।", true);
+
+  if (image && !validImage(image))
+    return message("ছবির লিংক অবশ্যই HTTPS URL হতে হবে।", true);
+
+  const id = $("editProductId").value;
+  const data = {
+    name: name.slice(0, 100),
+    category: $("productCategory").value,
+    price, stock,
+    image: validImage(image),
+    description: description.slice(0, 500),
+    updatedAt: serverTimestamp()
+  };
+
+  try {
+    if (id) {
+      await updateDoc(doc(db, "products", id), data);
+      message("পণ্য আপডেট হয়েছে।");
+    } else {
+      await addDoc(collection(db, "products"), {
+        ...data, createdAt: serverTimestamp()
+      });
+      message("নতুন পণ্য যোগ হয়েছে।");
+    }
+    resetProductForm();
+    await loadProducts();
+  } catch (error) {
+    console.error(error);
+    message("পণ্য সংরক্ষণ হয়নি। Admin UID ও Firestore Rules পরীক্ষা করো।", true);
+  }
+});
+
+window.resetProductForm = function() {
+  $("productForm").reset();
+  $("editProductId").value = "";
+};
+
+function renderAdminProducts() {
+  $("adminProducts").innerHTML = products.map(p => `
+    <div class="order-item">
+      <strong>${safeText(p.name)}</strong>
+      <p>দাম: ৳${money(p.price)} | স্টক: ${money(p.stock)}</p>
+      <button class="secondary" data-edit="${safeText(p.id)}">সম্পাদনা</button>
+      <button class="danger" data-delete="${safeText(p.id)}">মুছুন</button>
+    </div>`).join("") || "<p>কোনো পণ্য নেই।</p>";
+
+  $("adminProducts").querySelectorAll("[data-edit]").forEach(b => {
+    b.onclick = () => {
+      const p = products.find(x => x.id === b.dataset.edit);
+      if (!p) return;
+      $("editProductId").value = p.id;
+      $("productName").value = p.name || "";
+      $("productCategory").value = p.category || "জামা-কাপড়";
+      $("productPrice").value = p.price ?? 0;
+      $("productStock").value = p.stock ?? 0;
+      $("productImage").value = p.image || "";
+      $("productDescription").value = p.description || "";
+      $("productForm").scrollIntoView({ behavior: "smooth" });
+    };
+  });
+
+  $("adminProducts").querySelectorAll("[data-delete]").forEach(b => {
+    b.onclick = async () => {
+      if (!adminUser || !confirm("পণ্যটি মুছে ফেলতে চাও?")) return;
+      try {
+        await deleteDoc(doc(db, "products", b.dataset.delete));
+        delete cart[b.dataset.delete];
+        await loadProducts();
+        renderCart();
+        message("পণ্য মুছে ফেলা হয়েছে।");
+      } catch (error) {
+        console.error(error);
+        message("পণ্য মুছতে পারিনি। অনুমতি পরীক্ষা করো।", true);
+      }
+    };
+  });
+}
+
+window.loadOrders = async function() {
+  if (!adminUser) return;
+  $("adminOrders").textContent = "অর্ডার লোড হচ্ছে...";
+  try {
+    const snapshot = await getDocs(query(
+      collection(db, "orders"), orderBy("createdAt", "desc")
+    ));
+    $("adminOrders").innerHTML = snapshot.docs.map(item => {
+      const o = item.data();
+      const items = Array.isArray(o.items) ? o.items : [];
+      return `
+        <div class="order-item">
+          <strong>অর্ডার: ${safeText(item.id)}</strong>
+          <p>গ্রাহক: ${safeText(o.customerName)}</p>
+          <p>ফোন: ${safeText(o.phone)}</p>
+          <p>ঠিকানা: ${safeText(o.address)}</p>
+          <p>পণ্য: ${items.map(x =>
+            safeText(x.name) + " × " + Number(x.quantity || 0)
+          ).join(", ")}</p>
+          <p>মোট: ৳${money(o.total)}</p>
+          <p>স্ট্যাটাস: ${safeText(o.status || "নতুন")}</p>
+          <div class="row">
+            <select class="field" id="status-${safeText(item.id)}">
+              ${["নতুন","নিশ্চিত","পাঠানো হয়েছে","সম্পন্ন","বাতিল"].map(s =>
+                `<option ${o.status === s ? "selected" : ""}>${s}</option>`
+              ).join("")}
+            </select>
+            <button class="primary" data-status="${safeText(item.id)}">
+              স্ট্যাটাস সংরক্ষণ
+            </button>
+          </div>
+        </div>`;
+    }).join("") || "<p>এখনও কোনো অর্ডার নেই।</p>";
+
+    $("adminOrders").querySelectorAll("[data-status]").forEach(b => {
+      b.onclick = async () => {
+        if (!adminUser) return;
+        const status = $("status-" + b.dataset.status).value;
+        try {
+          await updateDoc(doc(db, "orders", b.dataset.status), {
+            status, updatedAt: serverTimestamp()
+          });
+          message("অর্ডারের স্ট্যাটাস আপডেট হয়েছে।");
+          loadOrders();
+        } catch (error) {
+          console.error(error);
+          message("স্ট্যাটাস আপডেট হয়নি। Rules পরীক্ষা করো।", true);
+        }
+      };
+    });
+  } catch (error) {
+    console.error(error);
+    $("adminOrders").textContent =
+      "অর্ডার লোড করা যায়নি। Firestore Rules পরীক্ষা করো।";
+  }
+};
+
+$("year").textContent = new Date().getFullYear();
+loadProducts();
+</script>
 </body>
 </html>
